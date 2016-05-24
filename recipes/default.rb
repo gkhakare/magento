@@ -19,7 +19,7 @@ end
 
 
 
-%W(php5 libcurl3 php5-curl php5-gd php5-mcrypt).each do |pkg|
+%W(libcurl3 php5-curl php5-gd php5-mcrypt).each do |pkg|
   package "#{pkg}" do
      action :install
      timeout 240
@@ -29,6 +29,7 @@ end
 
 
 include_recipe "apache2::default"
+include_recipe "apache2::mod_php5"
 
 magentoVersion = node[:magento][:version]
 
@@ -61,7 +62,7 @@ end
 bash 'extract_module' do 
   code <<-EOH
 	cd /tmp
-  	#wget https://github.com/OpenMage/magento-mirror/archive/#{magentoVersion}.tar.gz    
+  	wget https://github.com/OpenMage/magento-mirror/archive/#{magentoVersion}.tar.gz    
 	tar -xvf #{magentoVersion}.tar.gz
 	rm -rf /var/www/html/*
 	mv magento-mirror-#{magentoVersion}/* /var/www/html
@@ -76,7 +77,7 @@ template '/var/www/html/app/etc/local.xml' do
   group 'root'
   variables({
      :dbuser => node[:magento][:dbuser],
-     :dbpassword => node[:magento][:dbpass],
+     :dbpassword => node[:magento][:dbpassword],
      :dbname => node[:magento][:dbname],
      :dbhost => node[:magento][:dbhost]
   })
