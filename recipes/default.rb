@@ -11,6 +11,7 @@
 
 #Copy magento apache configuration file
 
+include_recipe "apache2"
 
 magentoVersion = node[:magento][:version]
 
