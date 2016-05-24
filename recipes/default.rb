@@ -64,7 +64,7 @@ end
 bash 'Install magento application' do 
   code <<-EOH
 	cd /tmp
-  	wget https://github.com/OpenMage/magento-mirror/archive/#{magentoVersion}.tar.gz    
+  	wget https://github.com/magento/magento2/archive/#{magentoVersion}.tar.gz
 	tar -xvf #{magentoVersion}.tar.gz
 	rm -rf /var/www/html/*
 	mv magento-mirror-#{magentoVersion}/* /var/www/html
