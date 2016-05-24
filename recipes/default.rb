@@ -90,6 +90,14 @@ template '/var/www/html/app/etc/local.xml' do
   })
 end
 
+bash 'Change ownership for magento app' do 
+  code <<-EOH
+	
+	sudo chown -R www-data:www-data /var/www/html/
+    EOH
+end
+
+
 service 'apache2' do
   action :restart
 end
