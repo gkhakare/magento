@@ -19,7 +19,12 @@ end
 
 
 
-%W(libcurl3 php5-curl php5-gd php5-mcrypt).each do |pkg|
+
+include_recipe "apache2::default"
+include_recipe "apache2::mod_php5"
+
+
+%W(libcurl3 php5-curl php5-gd php5-mcrypt libapache2-mod-auth-mysql php5-mysql).each do |pkg|
   package "#{pkg}" do
      action :install
      timeout 240
@@ -27,9 +32,6 @@ end
   end
 end
 
-
-include_recipe "apache2::default"
-include_recipe "apache2::mod_php5"
 
 magentoVersion = node[:magento][:version]
 
@@ -59,7 +61,7 @@ end
 
 
 
-bash 'extract_module' do 
+bash 'Install magento application' do 
   code <<-EOH
 	cd /tmp
   	wget https://github.com/OpenMage/magento-mirror/archive/#{magentoVersion}.tar.gz    
