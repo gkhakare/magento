@@ -42,7 +42,7 @@ end
 bash 'extract_module' do
  
   code <<-EOH
-    sudo a2ensite magento.conf
+    a2ensite magento.conf
     
     EOH
 
@@ -57,7 +57,12 @@ template '/etc/php5/apache2/php.ini' do
   })
 end
 
-
+bash 'Load mycrypt module' do 
+  code <<-EOH
+	php5enmod mcrypt
+	service apache2 restart
+    EOH
+end
 
 
 
