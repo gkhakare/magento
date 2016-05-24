@@ -42,9 +42,6 @@ execute "apt-get-update" do
   action :run
 end
 
-
-
-
 %W(libcurl3 php5-curl php5-gd php5-mcrypt).each do |pkg|
   package "#{pkg}" do
      action :install
@@ -76,4 +73,8 @@ template '/var/www/html/app/etc/local.xml' do
      :dbname => node[:magento][:dbname],
      :dbhost => node[:magento][:dbhost]
   })
+end
+
+service 'apache2' do
+  action :restart
 end
