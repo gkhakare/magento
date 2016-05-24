@@ -11,19 +11,36 @@
 
 #Copy magento apache configuration file
 
-include_recipe "apache2"
+execute "apt-get-update" do
+  command "sudo apt-get update -y"
+  ignore_failure true
+  action :run
+end
+
+
+
+%W(php5 libcurl3 php5-curl php5-gd php5-mcrypt).each do |pkg|
+  package "#{pkg}" do
+     action :install
+     timeout 240
+     retries 2
+  end
+end
+
+
+include_recipe "apache2::default"
 
 magentoVersion = node[:magento][:version]
 
-file '/etc/apache2/sites-available/magento.conf' do
-  path 'magento.conf' 
+cookbook_file '/etc/apache2/sites-available/magento.conf' do
+  source 'magento.conf' 
 end
 
 bash 'extract_module' do
  
   code <<-EOH
     sudo a2ensite magento.conf
-    sudo a2dissite 000-default.conf
+    
     EOH
 
 end
@@ -37,19 +54,8 @@ template '/etc/php5/apache2/php.ini' do
   })
 end
 
-execute "apt-get-update" do
-  command "sudo apt-get update -y"
-  ignore_failure true
-  action :run
-end
 
-%W(libcurl3 php5-curl php5-gd php5-mcrypt).each do |pkg|
-  package "#{pkg}" do
-     action :install
-     timeout 240
-     retries 2
-  end
-end
+
 
 
 bash 'extract_module' do 
