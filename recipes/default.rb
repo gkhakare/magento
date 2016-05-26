@@ -77,25 +77,7 @@ bash 'Install magento application' do
     EOH
 end
 
-template '/var/www/html/app/etc/local.xml' do
-  source 'local.xml.erb'
-  mode '0440'
-  owner 'root'
-  group 'root'
-  variables({
-     :dbuser => node[:magento][:dbuser],
-     :dbpassword => node[:magento][:dbpassword],
-     :dbname => node[:magento][:dbname],
-     :dbhost => node[:magento][:dbhost]
-  })
-end
 
-bash 'Change ownership for magento app' do 
-  code <<-EOH
-	
-	sudo chown -R www-data:www-data /var/www/html/
-    EOH
-end
 
 
 service 'apache2' do
